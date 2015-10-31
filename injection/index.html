@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Injection - инъекции | Security Notes by DmitryNaum</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="../stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="../stylesheets/monokai_sublime.css" media="screen">
+    </head>
+
+    <body>
+        <section class="page-header">
+            <h1 class="project-name">Security Notes</h1>
+            <h2 class="project-tagline">Заметки по безопасности web приложений</h2>
+            <a href="https://github.com/DmitryNaum/securityNotes" class="btn">GitHub репозиторий</a>
+            <a href="https://github.com/DmitryNaum/securityNotes/zipball/master" class="btn">.zip</a>
+            <a href="https://github.com/DmitryNaum/securityNotes/tarball/master" class="btn">.tar.gz</a>
+        </section>
+
+        <section class="main-content">
+            <ul class="breadcrumbs">
+                <li><a href="../index.html">Главная</a></li>
+                <li>Injection</li>
+            </ul>
+            <h3>
+                <a id="about-injections" class="anchor" href="#about-injections" aria-hidden="true"><span class="octicon octicon-link"></span></a>Что такое Injection.
+            </h3>
+
+            <p>
+               Injection — инъекция запроса. 
+               Позволяет злоумышленнику манипулировать каким-либо запросом путем внедрения в него своего подзапроса. 
+            </p>
+            <p>
+                Самый распространенный вид инъекций - <a href="sql.html">SQL инъекции</a>, но он не являеться единственным.
+                Существует мнежество различных типов инъекций, например <a href="shell.html">Shell injection</a>, XPath injection
+            </p>
+            <p>
+                При помощи инъекций можно причинить значительный вред веб приложению.
+                Например если на сайте есть возможность внедрить SQL инъекцию, то можно полностью выкачать базу данных,
+                а это серьёзная потеря. 
+                При помощи SQL инъекций так же можно сделать СУБД (речь идет о MySQL) частью ботнета для проведения DDoS атак
+                <a href="https://xakep.ru/2015/10/30/mysql-ddos/">подробнее можно прочесть тут</a>.
+            </p>
+            <p>
+                Ниже приведены ссылки на описание типов инъекций а так же методов защиты от них
+            </p>
+            <ul>
+                <li><a href="sql.html">SQL injection</a></li>
+                <li><a href="shell.html">Shell injection</a></li>
+            </ul>
+
+            <footer class="site-footer">
+                <span class="site-footer-owner"><a href="https://github.com/DmitryNaum/securityNotes">Security Notes</a> is maintained by <a href="https://github.com/DmitryNaum">DmitryNaum</a>.</span>
+
+                <span class="site-footer-credits">Using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+            </footer>
+
+        </section>
+
+
+    </body>
+
+</html>
