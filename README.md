@@ -15,3 +15,6 @@
 	* Активные XSS
 	* Пассивные XSS
 	* Dom Based XSS
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/DmitryNaum/securitynotes/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
