@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Security Notes by DmitryNaum</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/normalize.css" media="screen">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/monokai_sublime.css" media="screen">
+    </head>
+
+    <body>
+        <section class="page-header">
+            <h1 class="project-name">Security Notes</h1>
+            <h2 class="project-tagline">Заметки по безопасности web приложений</h2>
+            <a href="https://github.com/DmitryNaum/securityNotes" class="btn">GitHub репозиторий</a>
+            <a href="https://github.com/DmitryNaum/securityNotes/zipball/master" class="btn">.zip</a>
+            <a href="https://github.com/DmitryNaum/securityNotes/tarball/master" class="btn">.tar.gz</a>
+        </section>
+
+                    <section class="main-content">
+
+                <blockquote>
+<p><a href="../index.html">Главная</a> / <a href="index.html">Injetion</a> / Sql injection</p>
+</blockquote>
+<h3><a id="about"></a> <a href="#about">Что такое SQL Injection</a></h3>
+<p>Внедрение SQL-кода (англ. SQL injection) — один из распространённых способов взлома сайтов и программ, работающих с базами данных, основанный на внедрении в запрос произвольного SQL-кода.</p>
+<p>Внедрение SQL, в зависимости от типа используемой СУБД и условий внедрения, может дать возможность атакующему выполнить произвольный запрос к базе данных (например, прочитать содержимое любых таблиц, удалить, изменить или добавить данные), получить возможность чтения и/или записи локальных файлов и выполнения произвольных команд на атакуемом сервере.</p>
+<p>Атака типа внедрения SQL может быть возможна из-за некорректной обработки входных данных, используемых в SQL-запросах.</p>
+<p>При помощи SQL инъекций есть возможность &quot;зомбировать&quot; СУБД для коварных целей, например сделать <a href="https://xakep.ru/2015/10/30/mysql-ddos/">частью ботнета</a></p>
+<h3><a id='example'></a> <a href="#example">Пример уязвимости SQL Injection</a></h3>
+<p>Предположим есть сайт на котором есть новостной раздел. При просмотре новости мы попадаем на url вида <code>site.hach/news/?id=1</code>. Ниже представлен уязвимый кусок php кода который подгружает новость из БД.</p>
+<pre><code class="language-php">$id  = $_GET['id'];
+$sql = "SELECT `id` FROM `news` WHERE `id` = '$id'";</code></pre>
+<p>Таким образом, при запорсе страницы <code>site.hach/news/?id=1</code> в СУБД уйдет следующий запрос:</p>
+<pre><code class="language-sql">SELECT `id` FROM `news` WHERE `id` = '1'</code></pre>
+<p>Но стоит нам запростить страницу вида <code>site.hach/news/?id=1'; DELETE FROM</code>news<code>--</code> и наш запрос будет иметь следующий вид</p>
+<pre><code class="language-sql">SELECT `id` FROM `news` WHERE `id` = '1'; DELETE FROM `news` -- '</code></pre>
+<p>Таким образом в СУБД уйдет уже 2 запроса, и второй из них - DELETE который удалит все записи новостей</p>
+<h3><a id="protection"></a> <a href="#protection">Защита от SQL инъекций</a></h3>
+<p>Проблема вышеприведенного PHP кода заключается в том, что данные полученные от пользователя никак не фильтруются. Все данные которые получаемые от пользователя необходимо в обязательном порядке валидировать и фильтровать!</p>
+<p>Самый простой и эффективный способ защитить вышеприведенного код от инъекции - преобразовать id новости в целое число. Но данный способ не является универсальным, т.к. будет работать только с числами.</p>
+<pre><code class="language-php">$id  = intval($_GET['id']);
+$sql = "SELECT `id` FROM `news` WHERE `id` = '$id'";</code></pre>
+<p>Таким образом, при попытке внедрить SQL инъекцию все содержимое <code>$_GET['id']</code> будет преобразовано в целое число и в базу уйдет нормальный запрос.</p>
+<pre><code class="language-sql">SELECT `id` FROM `news` WHERE `id` = '1'</code></pre>
+<p>Но как писалось выше, это не универсальный способ защитить приложение от SQL инъекций. Это скорее костыль.</p>
+<p>Выделяют 2 способа защиты от SQL инъекций.<br />
+<a href="#escaping">Эскэйпинг параметров</a> и <a href="#parameterized">Параметризованные запросы</a></p>
+<h3><a id="escaping"></a><a href="#escaping">Эскэйпинг параметров</a></h3>
+<p>Эскейпинг - экранирование специальных символов в строке для предотвращения разрыва SQL запроса Далее будет описан пример использования эскейпинга параметров при использовании модуля PHP - mysqli. В mysqli как и во многих других модулях для работы с БД есть методы эскейпинга. Например <code>real_escape_string</code>. Ниже приведен пример использования <code>real_escape_string</code>.</p>
+<pre><code class="language-php">$id  = $mysqli-&gt;real_escape_string($_GET['id']);
+$sql = "select * from news where id = '{$id}';";</code></pre>
+<p>Таким образом наш SQL код, который уйдет в СУБД будет выглядеть следующим образом</p>
+<pre><code class="language-sql">SELECT `id` FROM `news` WHERE `id` = '1\'; drop table news -- ';</code></pre>
+<p>Можно заметить что метод <code>real_escape_string</code> экранировал одинарную кавычку которая ранее разрывала наш запрос и делила его на 2 запорса. В данном случае мы не найдем новость, но это не страшно т.к. злоумышленник знал на что идет, но не получил ожидаемого.</p>
+<h3><a id="parameterized"></a><a href="#parameterized">Параметризованные (подготавливаемые) запросы</a></h3>
+<p>Этот способ, пожалуй, является самым правильным.<br />
+Выполнение параметризованного запроса проводится в два этапа: подготовка и исполнение. На этапе подготовки на сервер посылается шаблон запроса. Сервер выполняет синтаксическую проверку этого шаблона, строит план выполнения запроса и выделяет под него ресурсы.</p>
+<p>За подготовкой идет выполнение. Во время запуска запроса клиент привязывает к псевдопеременным реальные значения и посылает их на сервер. Сервер, в свою очередь, подставляет их в шаблон и запускает уже готовый запрос на выполнение.</p>
+<p>Параметризованный запрос можно запускать многократно. Перед каждым запуском значения привязанных переменных будут передаваться на сервер и подставляться в текст запроса. Сам текст запроса повторно не анализируется, равно как и не отсылается повторно шаблон.</p>
+<p>Ниже приведены 2 примера параметризованного запроса с использованием PDO</p>
+<pre><code class="language-php">$sql = "SELECT `id` FROM `news` WHERE `id` = ?";
+$stm = $pdo-&gt;prepare(sql);
+$id  = $_GET['id'];
+
+$stm-&gt;execute([$id]);
+$result = $stm-&gt;fetchAll();
+
+$sql = "SELECT `id` FROM `news` WHERE `id` = :id";
+$stm = $pdo-&gt;prepare(sql);
+$id  = $_GET['id'];
+
+$stm-&gt;execute([':id' =&gt; $id]);
+$result = $stm-&gt;fetchAll();</code></pre>
+
+                <footer class="site-footer">
+                    <span class="site-footer-owner"><a href="https://github.com/DmitryNaum/securityNotes">Security Notes</a> is maintained by <a href="https://github.com/DmitryNaum">DmitryNaum</a>.</span>
+
+                    <span class="site-footer-credits">Using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+                </footer>
+
+            </section>
+                <script src="https://dmitrynaum.github.io/SecurityNotes/js/jquery.min.js"></script>
+        <script src="https://dmitrynaum.github.io/SecurityNotes/js/highlight.min.js"></script>
+        <script>
+            if (location.href.indexOf('https://dmitrynaum.github.io/SecurityNotes') > -1) {
+                (function (i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                            m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-69496870-1', 'auto');
+                ga('send', 'pageview');
+            }
+            $('code[class *= language]').each(function (i, el) {
+                var lang = $(el).attr('class').replace('language-', '');
+                var code = $(el).text();
+                $(el).closest('pre').addClass('hljs');
+                $(el).html(hljs.highlight(lang, code).value);
+            });
+        </script>
+    </body>
+
+</html>
