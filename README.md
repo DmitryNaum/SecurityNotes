@@ -11,10 +11,7 @@
 * [Injection - инъекции](injection/index.md)
 	* [SQL injection](injection/sql.md)
 	* [Shell injection](injection/shell.md)
-* XSS - межсайтовый скриптинг
-	* Активные XSS
+* [XSS - межсайтовый скриптинг](xss/index.md)
+	* [Отражённые XSS](xss/reflected.md)
 	* Пассивные XSS
 	* Dom Based XSS
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/DmitryNaum/securitynotes/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
