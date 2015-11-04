@@ -1,4 +1,4 @@
-> [Главная](../index.html) / Injetion
+> [Главная](../index.md) / Injetion
 
 ### <a id="about"></a> [Что такое Injection](#about)
 
