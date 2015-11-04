@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Security Notes by DmitryNaum</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/normalize.css" media="screen">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/monokai_sublime.css" media="screen">
+    </head>
+
+    <body>
+        <section class="page-header">
+            <h1 class="project-name">Security Notes</h1>
+            <h2 class="project-tagline">Заметки по безопасности web приложений</h2>
+            <a href="https://github.com/DmitryNaum/securityNotes" class="btn">GitHub репозиторий</a>
+            <a href="https://github.com/DmitryNaum/securityNotes/zipball/master" class="btn">.zip</a>
+            <a href="https://github.com/DmitryNaum/securityNotes/tarball/master" class="btn">.tar.gz</a>
+        </section>
+
+                    <section class="main-content">
+
+                <blockquote>
+<p><a href="../index.html">Главная</a>  /  <a href="index.html">XSS</a> / Отражённые XSS</p>
+</blockquote>
+<h3><a id="about"></a> <a href="#about">Что такое  отражённые XSS</a></h3>
+<p>Суть отражённой XSS заключается в том, что бэкэнд не фильтрует (или плохо фильтрует) полученные от пользователя данные и выводит их в браузер. Таким образом злоумышленнику как правило достаточно просто сформировать ссылку и заманить на нее пользователя.</p>
+<h3><a id='example'></a> <a href="#example">Пример уязвимости</a></h3>
+<p>Предположим у нас есть код который выводит имя пользователя полученное из GET параметра</p>
+<pre><code class="language-php">echo '&lt;h1&gt;Привет, '.$_GET['username'].'&lt;/h1&gt;';</code></pre>
+<p>Если мы переходим по ссылке <code>some.site/hello?name=Вася</code> то страница будет содержать следующий контент: </p>
+<pre><code class="language-html">&lt;h1&gt;Привет, Вася&lt;/h1&gt;</code></pre>
+<p>Но если мы запросим страницу  <code>some.site/hello?name=Вася&lt;/h1&gt;&lt;script&gt;alert('xss')&lt;/script&gt;&lt;h1&gt;</code> и страница будет содержать следующий html код</p>
+<pre><code class="language-html">&lt;h1&gt;Привет, Вася&lt;/h1&gt;&lt;script&gt;alert('xss')&lt;/script&gt;&lt;h1&gt;&lt;/h1&gt;</code></pre>
+<p>Таким образом в браузере пользователя выполнится JavaScript код злоумышленника.</p>
+<h3><a id="protection"></a> <a href="#protection">Защита</a></h3>
+<p>Необходимо всегда фильтровать данные полученные из вне.
+В php есть замечательная функция <a href="http://php.net/manual/ru/function.htmlspecialchars.php">htmlspecialchars</a> которая поможет спастись от xss атак.</p>
+<blockquote>
+<p>htmlspecialchars — Преобразует специальные символы в HTML-сущности
+Производятся следующие преобразования:
+'&amp;' (амперсанд) преобразуется в '&amp;'
+'&quot;' (двойная кавычка) преобразуется в '&quot;' в режиме ENT_NOQUOTES is not set.
+&quot;'&quot; (одиночная кавычка) преобразуется в '&#039;' (или &apos;) только в режиме ENT_QUOTES.
+'&lt;' (знак &quot;меньше чем&quot;) преобразуется в '&lt;'
+'&gt;' (знак &quot;больше чем&quot;) преобразуется в '&gt;'</p>
+</blockquote>
+<p>Чтобы избавиться от уязвимости в коде выше, необходимо переписать его следующим образом</p>
+<pre><code class="language-php">$username = htmlspecialchars($_GET['username']);
+echo '&lt;h1&gt;Привет, '.$username.'&lt;/h1&gt;';</code></pre>
+<p>Теперь, при переходе по ранее уязвимой ссылке <code>some.site/hello?name=Вася&lt;/h1&gt;&lt;script&gt;alert('xss')&lt;/script&gt;&lt;h1&gt;</code> будет выведен следующий html</p>
+<pre><code class="language-html">&lt;h1&gt;Привет, Вася&amp;lt;/h1&amp;gt;&amp;lt;script&amp;gt;alert('xss')&amp;lt;/script&amp;gt;&amp;lt;h1&amp;gt;&lt;/h1&gt;</code></pre>
+<p>Пользователь при этом увидит</p>
+<blockquote>
+<h1 id="-">Привет, Вася</h1>
+<p>&lt;/h1&gt;&lt;script&gt;alert('xss')&lt;/script&gt;&lt;h1&gt;</p>
+</blockquote>
+
+                <footer class="site-footer">
+                    <span class="site-footer-owner"><a href="https://github.com/DmitryNaum/securityNotes">Security Notes</a> is maintained by <a href="https://github.com/DmitryNaum">DmitryNaum</a>.</span>
+
+                    <span class="site-footer-credits">Using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+                </footer>
+
+            </section>
+                <script src="https://dmitrynaum.github.io/SecurityNotes/js/jquery.min.js"></script>
+        <script src="https://dmitrynaum.github.io/SecurityNotes/js/highlight.min.js"></script>
+        <script>
+            if (location.href.indexOf('https://dmitrynaum.github.io/SecurityNotes') > -1) {
+                (function (i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                            m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-69496870-1', 'auto');
+                ga('send', 'pageview');
+            }
+            $('code[class *= language]').each(function (i, el) {
+                var lang = $(el).attr('class').replace('language-', '');
+                var code = $(el).text();
+                $(el).closest('pre').addClass('hljs');
+                $(el).html(hljs.highlight(lang, code).value);
+            });
+        </script>
+    </body>
+
+</html>
