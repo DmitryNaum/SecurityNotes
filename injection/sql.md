@@ -1,4 +1,4 @@
-> [Главная](../index.md) / [Injetion](index.md) / Sql injection
+> [Главная](../README.md) / [Injetion](index.md) / Sql injection
 
 ### <a id="about"></a> [Что такое SQL Injection](#about)
 

@@ -1,4 +1,4 @@
-> [Главная](../index.md)  /  [XSS](index.md) / Отражённые XSS
+> [Главная](../README.md)  /  [XSS](index.md) / Отражённые XSS
 
 ### <a id="about"></a> [Что такое  отражённые XSS](#about)
 

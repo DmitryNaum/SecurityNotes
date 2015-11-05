@@ -1,4 +1,4 @@
-> [Главная](../index.md) / [Injetion](index.md) / Shell injection
+> [Главная](../README.md) / [Injetion](index.md) / Shell injection
 
 ### <a id="about"></a> [Что такое Shell Injection.](#about)
 
