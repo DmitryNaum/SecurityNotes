@@ -15,3 +15,4 @@
 	* [Отражённые XSS](xss/reflected.md)
 	* [Хранимые XSS](xss/stored.md)
 	* Dom Based XSS
+* [Broken Authentication and Session Management](basm.md)
