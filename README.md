@@ -20,3 +20,4 @@
 * [Security Misconfiguration](sm.md)
 * [Insecure Cryptographic Storage](ics.md)
 * [Failure to Restrict URL Access](frua.md)
+* [Insufficient Transport Layer Protection](itlp.md)
