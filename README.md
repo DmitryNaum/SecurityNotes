@@ -17,3 +17,4 @@
 	* Dom Based XSS
 * [Broken Authentication and Session Management](basm.md)
 * [Insecure Direct Object References](idor.md)
+* [Security Misconfiguration](sm.md)
