@@ -22,30 +22,25 @@
 
                     <section class="main-content">
 
-                <h2><a id="about"></a> <a href="#about">Что это такое</a></h2>
-<p>Это небольшой проект в котором рассказываются некоторые мысли по безопасности веб приложений. А так же приводятся примеры уязвимостей, реализации атак на эти уязвимости и способы защиты от них</p>
-<h2><a id="disclaimer"></a> <a href="#disclaimer">Disclaimer</a></h2>
-<p>Вся информация представлена исключительно в ознакомительных целях. В случае использования ее в незаконных целях автор ответственности не несет.</p>
-<h2><a id="contents"></a> <a href="#contents">Оглавление</a></h2>
+                <blockquote>
+<p><a href="index.html">Главная</a>  / Unvalidated Redirects and Forwards </p>
+</blockquote>
+<h3><a id="about"></a> <a href="#about">Что такое Unvalidated Redirects and Forwards</a></h3>
+<p>Приложение перенаправляет пользователя на сторонние сайты не предупреждая его об этом. Например при клике по ссылке или при запросе страницы вида site.ru/redirect?url=hack.me.
+Либо приложение запоминает url на который необходимо вернуть пользователя и не проверяет его валидность (домен) и тем самым приложение может отправить пользователя на фишинговый сайт.</p>
+<h3><a id='vulnerable'></a> <a href="#vulnerable">Как определить что приложение уязвимо</a></h3>
 <ul>
-<li><a href="injection/index.html">Injection - инъекции</a>
+<li>На сайте есть редиректы? Проверяется ли url на который необходимо совершить редирект?</li>
+<li>Пользователю показывается предупреждение о том, что он будет перенаправлен на внешний сайт?</li>
+</ul>
+<h3><a id='example'></a> <a href="#example">Примеры уязвимости</a></h3>
+<p>На сайте есть страница redirect.php которая принимает параметр url и перенаправляет на него пользователя. Злоумышленник подставляет туда url фишингово сайта и пользователь ничего не подозревая уходит на фишинговый сайт и вводит там свои логин и пароль.
+<code>http://www.example.com/redirect.php?url=evil.com</code></p>
+<h3><a id="protection"></a> <a href="#protection">Защита</a></h3>
 <ul>
-<li><a href="injection/sql.html">SQL injection</a></li>
-<li><a href="injection/shell.html">Shell injection</a></li>
-</ul></li>
-<li><a href="xss/index.html">XSS - межсайтовый скриптинг</a>
-<ul>
-<li><a href="xss/reflected.html">Отражённые XSS</a></li>
-<li><a href="xss/stored.html">Хранимые XSS</a></li>
-<li>Dom Based XSS</li>
-</ul></li>
-<li><a href="basm.html">Broken Authentication and Session Management</a></li>
-<li><a href="idor.html">Insecure Direct Object References</a></li>
-<li><a href="sm.html">Security Misconfiguration</a></li>
-<li><a href="ics.html">Insecure Cryptographic Storage</a></li>
-<li><a href="frua.html">Failure to Restrict URL Access</a></li>
-<li><a href="itlp.html">Insufficient Transport Layer Protection</a></li>
-<li><a href="urf.html">Unvalidated Redirects and Forwards</a></li>
+<li>Избегать использование редиректов</li>
+<li>Не использовать пользовательские данные при редикертах (тех что в GET запросах)</li>
+<li>Предупреждать пользователей когда они покидают сайт</li>
 </ul>
 
                 <footer class="site-footer">
