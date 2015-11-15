@@ -22,25 +22,25 @@
 
                     <section class="main-content">
 
-                <h2><a id="about"></a> <a href="#about">Что это такое</a></h2>
-<p>Это небольшой проект в котором рассказываются некоторые мысли по безопасности веб приложений. А так же приводятся примеры уязвимостей, реализации атак на эти уязвимости и способы защиты от них</p>
-<h2><a id="disclaimer"></a> <a href="#disclaimer">Disclaimer</a></h2>
-<p>Вся информация представлена исключительно в ознакомительных целях. В случае использования ее в незаконных целях автор ответственности не несет.</p>
-<h2><a id="contents"></a> <a href="#contents">Оглавление</a></h2>
+                <blockquote>
+<p><a href="../index.html">Главная</a>  /  Insecure Direct Object References </p>
+</blockquote>
+<h3><a id="about"></a> <a href="#about">Что такое Insecure Direct Object References </a></h3>
+<p>Данный вид уязвимости является также следствием недостаточной проверки пользовательских данных. Суть ее заключается в том, что при выводе каких-либо конфиденциальных данных, например личных сообщений или учетных карточек клиентов, для доступа к объекту используется идентификатор, который передается в открытом виде в адресной строке браузера, И не реализована проверка прав доступа к объектам.</p>
+<h3><a id='vulnerable'></a> <a href="#vulnerable">Как определить что приложение уязвимо</a></h3>
 <ul>
-<li><a href="injection/index.html">Injection - инъекции</a>
+<li>Приложение не проверяет права доступа к объектам с ограниченным доступом</li>
+<li>Если ссылка на объект является косвенной, то необходимо проверить как приложение реагирует если убрать параметры привязанные к пользователю <code>/order?id=124&amp;service=5434</code> → <code>/order?id=&amp;service=1</code></li>
+</ul>
+<h3><a id='example'></a> <a href="#example">Пример уязвимости</a></h3>
+<p>Приложение использует в SQL запросе неподтвержденные данные от пользователя и при этом приложение в дальнейшем не проверяет права доступа.</p>
+<pre><code class="language-php">$sql = 'SELECT * FROM `orders` WHERE `id`= ?';</code></pre>
+<p>Таким образом пользователь может узнать информацию по любому объекту order.</p>
+<h3><a id="protection"></a> <a href="#protection">Защита</a></h3>
 <ul>
-<li><a href="injection/sql.html">SQL injection</a></li>
-<li><a href="injection/shell.html">Shell injection</a></li>
-</ul></li>
-<li><a href="xss/index.html">XSS - межсайтовый скриптинг</a>
-<ul>
-<li><a href="xss/reflected.html">Отражённые XSS</a></li>
-<li><a href="xss/stored.html">Хранимые XSS</a></li>
-<li>Dom Based XSS</li>
-</ul></li>
-<li><a href="basm.html">Broken Authentication and Session Management</a></li>
-<li><a href="idor.html">Insecure Direct Object References</a></li>
+<li>Не использовать прямые ссылки на объекты.</li>
+<li>Например обфусцировать их либо писать id в сессию а пользователю отдавать случайную уникальную строку и потом искать id по ней.</li>
+<li>Проверять доступ к объектам.</li>
 </ul>
 
                 <footer class="site-footer">
