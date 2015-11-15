@@ -21,3 +21,4 @@
 * [Insecure Cryptographic Storage](ics.md)
 * [Failure to Restrict URL Access](frua.md)
 * [Insufficient Transport Layer Protection](itlp.md)
+* [Unvalidated Redirects and Forwards](urf.md)
