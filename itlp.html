@@ -22,29 +22,28 @@
 
                     <section class="main-content">
 
-                <h2><a id="about"></a> <a href="#about">Что это такое</a></h2>
-<p>Это небольшой проект в котором рассказываются некоторые мысли по безопасности веб приложений. А так же приводятся примеры уязвимостей, реализации атак на эти уязвимости и способы защиты от них</p>
-<h2><a id="disclaimer"></a> <a href="#disclaimer">Disclaimer</a></h2>
-<p>Вся информация представлена исключительно в ознакомительных целях. В случае использования ее в незаконных целях автор ответственности не несет.</p>
-<h2><a id="contents"></a> <a href="#contents">Оглавление</a></h2>
+                <blockquote>
+<p><a href="index.html">Главная</a>  / Insufficient Transport Layer Protection</p>
+</blockquote>
+<h3><a id="about"></a> <a href="#about">Insufficient Transport Layer Protection</a></h3>
+<p>Суть проблемы заключается в том, что чувствительные данные передаются по открытому, незащищенному каналу (http, ftp).</p>
+<h3><a id='vulnerable'></a> <a href="#vulnerable">Как определить что приложение уязвимо</a></h3>
 <ul>
-<li><a href="injection/index.html">Injection - инъекции</a>
+<li>SSL используется для передачи всего авторизованного трафика?</li>
+<li>SSL используется для всех приватных страниц? Есть ли на этих страницах данные передаваемые по открытым каналам (js по http)</li>
+<li>Используются стойкие алгоритмы?</li>
+<li>Сессионные куки имеют флаг «secure»?</li>
+<li>Сертификат сервера легитимен и верно ли сконфигурирован сервер?</li>
+</ul>
+<h3><a id='example'></a> <a href="#example">Примеры уязвимости</a></h3>
+<p>Сайт не использует https для передачи данных авторизованых пользователей. Таким образом злоумышленнику достаточно просто мониторить сетевой трафик, выдрав из трафика куку авторизованного пользователя злоумышленник получит полный доступ к его аккаунту.</p>
+<h3><a id="protection"></a> <a href="#protection">Защита</a></h3>
 <ul>
-<li><a href="injection/sql.html">SQL injection</a></li>
-<li><a href="injection/shell.html">Shell injection</a></li>
-</ul></li>
-<li><a href="xss/index.html">XSS - межсайтовый скриптинг</a>
-<ul>
-<li><a href="xss/reflected.html">Отражённые XSS</a></li>
-<li><a href="xss/stored.html">Хранимые XSS</a></li>
-<li>Dom Based XSS</li>
-</ul></li>
-<li><a href="basm.html">Broken Authentication and Session Management</a></li>
-<li><a href="idor.html">Insecure Direct Object References</a></li>
-<li><a href="sm.html">Security Misconfiguration</a></li>
-<li><a href="ics.html">Insecure Cryptographic Storage</a></li>
-<li><a href="frua.html">Failure to Restrict URL Access</a></li>
-<li><a href="itlp.html">Insufficient Transport Layer Protection</a></li>
+<li>Использовать SSL для всех чувствительных страниц. Если запрос пришел не через защищенный канал, отправлять пользователя на защищенный канал.</li>
+<li>Выставлять флаг «secure» у сессионных кук</li>
+<li>Сконфигурировать SSL с использованием стойких алгоритмов</li>
+<li>Убедиться что используется валидный сертификат (время его жизни не истекло, он не был перевыпущен, он выписан на текущий домен)</li>
+<li>Все данные передаваемые между компонентами бэкэнда должны передаваться по защищенному каналу (ssl, vpn etc.)</li>
 </ul>
 
                 <footer class="site-footer">
