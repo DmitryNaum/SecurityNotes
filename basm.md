@@ -1,4 +1,4 @@
-> [Главная](../index.md)  /  Broken Authentication and Session Management
+> [Главная](README.md)  /  Broken Authentication and Session Management
 
 ### <a id="about"></a> [Что такое  Broken Authentication and Session Management](#about)
 Суть уязвимости заключается в том, что были допущены ошибки в архитектуре аутентификации и управления сессиями.
