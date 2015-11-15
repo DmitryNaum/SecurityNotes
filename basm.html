@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Security Notes by DmitryNaum</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/normalize.css" media="screen">
+        <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/stylesheet.css" media="screen">
+        <link rel="stylesheet" type="text/css" href="https://dmitrynaum.github.io/SecurityNotes/stylesheets/monokai_sublime.css" media="screen">
+    </head>
+
+    <body>
+        <section class="page-header">
+            <h1 class="project-name">Security Notes</h1>
+            <h2 class="project-tagline">Заметки по безопасности web приложений</h2>
+            <a href="https://github.com/DmitryNaum/securityNotes" class="btn">GitHub репозиторий</a>
+            <a href="https://github.com/DmitryNaum/securityNotes/zipball/master" class="btn">.zip</a>
+            <a href="https://github.com/DmitryNaum/securityNotes/tarball/master" class="btn">.tar.gz</a>
+        </section>
+
+                    <section class="main-content">
+
+                <blockquote>
+<p><a href="../index.html">Главная</a>  /  Broken Authentication and Session Management</p>
+</blockquote>
+<h3><a id="about"></a> <a href="#about">Что такое  Broken Authentication and Session Management</a></h3>
+<p>Суть уязвимости заключается в том, что были допущены ошибки в архитектуре аутентификации и управления сессиями.</p>
+<h3><a id='vulnerable'></a> <a href="#vulnerable">Как определить что приложение уязвимо</a></h3>
+<ul>
+<li>Данные аутентификации пользователя хранятся в незащищенном виде?</li>
+<li>Критичная информация может быть выдана через слабые функции управления аккаунтом (восстановление пароля, регистрация, слабые сессии)?</li>
+<li>Id сессии передается в URL?</li>
+<li>Id сессии подвержены атаке фиксации?</li>
+<li>Id сессии не имеет таймаута либо удаляется только на стороне пользователя?</li>
+<li>Сессия не обновляется после успешного логина?</li>
+<li>Пароли, сессии, и прочая критичная информация передается по открытому каналу?</li>
+</ul>
+<h3><a id='example'></a> <a href="#example">Пример уязвимости</a></h3>
+<h4 id="-1">Пример 1</h4>
+<p>Приложение умеет обрабатывать id сессии либо записывает их в get параметрах  <code>http://example.com/sale/saleitems?sessionid=268544541</code>
+Таким образом поделившись ссылкой пользователь автоматически авторизовывет от своего имени всех кто по ней перейдет.
+Злоумышленник может выставить пользователю известный ему id сессии и затем получить доступ к его аккаунту</p>
+<h4 id="-2">Пример 2</h4>
+<p>Приложение не контролирует время жизни сессии.
+Пользователь зашел на сайт с публичной точки доступа и авторизовался на нем. Но вместо того чтобы нажать «выйти» пользователь просто закрыл вкладку и ушел. Таким образом следующий кто зайдет на сайт с этой точки доступа будет авторизован от имени первого пользователя.</p>
+<h4 id="-3">Пример 3</h4>
+<p>Злоумышленник получил доступ к БД в которой хранятся все пароли и логины пользователей в открытом виде.
+Таким образом он получил все на блюдечке с голубой каемочкой. </p>
+<h3><a id="protection"></a> <a href="#protection">Защита</a></h3>
+<ul>
+<li>Необходимо защитить сайт от XSS</li>
+<li>Использовать надежную систему авторизации учитывая пункты на слайде «Как определить что приложение уязвимо»</li>
+<li>Соблюдать стандарты «<a href="https://www.owasp.org/index.php/ASVS">OWASP’s Application Security Verification Standard</a>» ((ASVS) areas V2 (Authentication) and V3 (Session Management))</li>
+<li>Использовать простые интерфейсы для разработчиков</li>
+</ul>
+
+                <footer class="site-footer">
+                    <span class="site-footer-owner"><a href="https://github.com/DmitryNaum/securityNotes">Security Notes</a> is maintained by <a href="https://github.com/DmitryNaum">DmitryNaum</a>.</span>
+
+                    <span class="site-footer-credits">Using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
+                </footer>
+
+            </section>
+                <script src="https://dmitrynaum.github.io/SecurityNotes/js/jquery.min.js"></script>
+        <script src="https://dmitrynaum.github.io/SecurityNotes/js/highlight.min.js"></script>
+        <script>
+            if (location.href.indexOf('https://dmitrynaum.github.io/SecurityNotes') > -1) {
+                (function (i, s, o, g, r, a, m) {
+                    i['GoogleAnalyticsObject'] = r;
+                    i[r] = i[r] || function () {
+                        (i[r].q = i[r].q || []).push(arguments)
+                    }, i[r].l = 1 * new Date();
+                    a = s.createElement(o),
+                            m = s.getElementsByTagName(o)[0];
+                    a.async = 1;
+                    a.src = g;
+                    m.parentNode.insertBefore(a, m)
+                })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+
+                ga('create', 'UA-69496870-1', 'auto');
+                ga('send', 'pageview');
+            }
+            $('code[class *= language]').each(function (i, el) {
+                var lang = $(el).attr('class').replace('language-', '');
+                var code = $(el).text();
+                $(el).closest('pre').addClass('hljs');
+                $(el).html(hljs.highlight(lang, code).value);
+            });
+        </script>
+    </body>
+
+</html>
