@@ -19,3 +19,4 @@
 * [Insecure Direct Object References](idor.md)
 * [Security Misconfiguration](sm.md)
 * [Insecure Cryptographic Storage](ics.md)
+* [Failure to Restrict URL Access](frua.md)
