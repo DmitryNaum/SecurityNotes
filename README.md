@@ -13,5 +13,5 @@
 	* [Shell injection](injection/shell.md)
 * [XSS - межсайтовый скриптинг](xss/index.md)
 	* [Отражённые XSS](xss/reflected.md)
-	* Пассивные XSS
+	* [Хранимые XSS](xss/stored.md)
 	* Dom Based XSS
